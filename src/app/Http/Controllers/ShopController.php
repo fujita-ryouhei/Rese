@@ -15,4 +15,14 @@ class ShopController extends Controller
     {
         return view('register');
     }
+
+    public function login()
+    {
+        return view('login');
+    }
+
+    public function thanks()
+    {
+        return view('thanks');
+    }
 }
