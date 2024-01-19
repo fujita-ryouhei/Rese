@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +17,11 @@ use App\Http\Controllers\ShopController;
 */
 
 Route::get('/', [ShopController::class, 'index']);
-Route::get('/register', [ShopController::class, 'register']);
+Route::get('/register', [RegisteredUserController::class, 'register']);
+Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/login', [ShopController::class, 'login']);
+Route::get('/signIn', [AuthenticatedSessionController::class, 'store']);
+Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 route::get('/thanks', [ShopController::class, 'thanks']);
 route::get('/done', [ShopController::class, 'done']);
 Route::get('/menu1', [ShopController::class, 'menu1']);

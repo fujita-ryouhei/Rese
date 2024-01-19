@@ -18,30 +18,41 @@
     </header>
 
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="box">
             <div class="box-contents">
                 <div class="box-header">
                     <p>Registration</p>
                 </div>
                 <div class="contents">
-                    <form action="" method="post" class="register-form">
+                    <form action="/register" method="post" class="register-form">
+                        @csrf
                         <div class="contents-item">
                             <div class="contents-item_img">
                                 <i class="fa-solid fa-user fa-fw fa-lg"></i>
                             </div>
-                            <input type="text" class="contents-item_explanation" placeholder="Username">
+                            <input type="text" name="name" id="name" class="contents-item_explanation" placeholder="Username" value="{{ old('name') }}">
                         </div>
                         <div class="contents-item">
                             <div class="contents-item_img">
                                 <i class="fa-solid fa-envelope fa-fw fa-lg"></i>
                             </div>
-                            <input type="email" class="contents-item_explanation" placeholder="Email">
+                            <input type="email" name="email" id="email" class="contents-item_explanation" placeholder="Email" value="{{ old('email') }}">
                         </div>
                         <div class="contents-item">
                             <div class="contents-item_img">
                                 <i class="fa-solid fa-lock fa-fw fa-lg"></i>
                             </div>
-                            <input type="password" class="contents-item_explanation" placeholder="Password">
+                            <input type="password" name="password" id="password" class="contents-item_explanation" placeholder="Password">
                         </div>
                         <div class="form-button">
                             <button type="submit" class="button">登録</button>
