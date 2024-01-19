@@ -18,3 +18,7 @@ Route::get('/', [ShopController::class, 'index']);
 Route::get('/register', [ShopController::class, 'register']);
 Route::get('/login', [ShopController::class, 'login']);
 route::get('/thanks', [ShopController::class, 'thanks']);
+route::get('/done', [ShopController::class, 'done']);
+Route::get('/menu1', [ShopController::class, 'menu1']);
+Route::get('/menu2', [ShopController::class, 'menu2']);
+Route::get('/mypage', [ShopController::class, 'mypage']);
