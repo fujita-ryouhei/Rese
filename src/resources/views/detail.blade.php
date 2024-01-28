@@ -94,7 +94,7 @@
                         <div class="reservation-detail">
                             <div class="reservation_list flex">
                                 <p>Shop</p>
-                                <p>仙人</p>
+                                <p>{{ $shop->name }}</p>
                             </div>
                             <div class="reservation_list flex">
                                 <p>Date</p>
