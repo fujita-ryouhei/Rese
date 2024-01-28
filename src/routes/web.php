@@ -24,6 +24,9 @@ Route::get('/signIn', [AuthenticatedSessionController::class, 'store']);
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 route::get('/thanks', [ShopController::class, 'thanks']);
 route::get('/done', [ShopController::class, 'done']);
-Route::get('/menu1', [ShopController::class, 'menu1']);
-Route::get('/menu2', [ShopController::class, 'menu2']);
-Route::get('/mypage', [ShopController::class, 'mypage']);
+Route::get('//detail/{id}', [ShopController::class, 'detail'])->name('detail.page');
+Route::get('/menu', [ShopController::class, 'menu']);
+Route::middleware(['web', 'auth',])->group(function () {
+    Route::get('/mypage', [ShopController::class, 'mypage']);
+});
+Route::get('/get-result', [ShopController::class, 'getResult'])->name('getResult');

@@ -11,7 +11,7 @@
 <body>
     <header class="header">
         <div class="header-icon">
-            <a href="/">
+            <a href="/menu">
                 <h1 class="header-icon_ttl"><i class="fa-solid fa-square-poll-horizontal fa-fw"></i>Rese</h1>
             </a>
         </div>
@@ -32,75 +32,23 @@
 
     <main>
         <div class="flex__item wrap">
-            <div class="card">
-                <div class="card__img">
-                    <img src="https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/sushi.jpg" alt="" />
-                </div>
-                <div class="card__content">
-                    <div class="card__content-cat">仙人</div>
-                    <div class="card__content-tag">
-                        <p class="card__content-tag-item">#東京都</p>
-                        <p class="card__content-tag-item">#寿司</p>
+            @foreach($shops->take(20) as $shop)
+                <div class="card">
+                    <div class="card__img">
+                        <img src="{{ $shop->image_url }}" alt="" />
                     </div>
-                    <div class="card__content-detail">詳しくみる</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card__img">
-                    <img src="https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/yakiniku.jpg" alt="" />
-                </div>
-                <div class="card__content">
-                    <div class="card__content-cat">仙人</div>
-                    <div class="card__content-tag">
-                        <p class="card__content-tag-item">#東京都</p>
-                        <p class="card__content-tag-item">#寿司</p>
+                    <div class="card__content">
+                        <div class="card__content-cat">{{ $shop->name }}</div>
+                        <div class="card__content-tag">
+                            <p class="card__content-tag-item">#{{ $shop->location }}</p>
+                            <p class="card__content-tag-item">#{{ $shop->category }}</p>
+                        </div>
+                        <a href="{{ route('detail.page', ['id' => $shop->id]) }}">
+                            <div class="card__content-detail">詳しくみる</div>
+                        </a>
                     </div>
-                    <div class="card__content-detail">詳しくみる</div>
                 </div>
-            </div>
-
-            <div class="card">
-                <div class="card__img">
-                    <img src="https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/izakaya.jpg" alt="" />
-                </div>
-                <div class="card__content">
-                    <div class="card__content-cat">仙人</div>
-                    <div class="card__content-tag">
-                        <p class="card__content-tag-item">#東京都</p>
-                        <p class="card__content-tag-item">#寿司</p>
-                    </div>
-                    <div class="card__content-detail">詳しくみる</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card__img">
-                    <img src="https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/italian.jpg" alt="" />
-                </div>
-                <div class="card__content">
-                    <div class="card__content-cat">仙人</div>
-                    <div class="card__content-tag">
-                        <p class="card__content-tag-item">#東京都</p>
-                        <p class="card__content-tag-item">#寿司</p>
-                    </div>
-                    <div class="card__content-detail">詳しくみる</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card__img">
-                    <img src="https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/ramen.jpg" alt="" />
-                </div>
-                <div class="card__content">
-                    <div class="card__content-cat">仙人</div>
-                    <div class="card__content-tag">
-                        <p class="card__content-tag-item">#東京都</p>
-                        <p class="card__content-tag-item">#寿司</p>
-                    </div>
-                    <div class="card__content-detail">詳しくみる</div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </main>
 </body>

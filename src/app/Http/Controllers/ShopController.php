@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Shop;
+use Auth;
 
 class ShopController extends Controller
 {
     public function index()
     {
-        return view('index');
+        $shops = Shop::all();
+        return view('index', ['shops' => $shops]);
     }
 
     public function login()
@@ -26,18 +29,29 @@ class ShopController extends Controller
         return view('done');
     }
 
-    public function menu1()
+    public function detail()
     {
-        return view('menu1');
+        return view('detail');
     }
 
-    public function menu2()
+    public function menu()
     {
-        return view('menu2');
+        $prevurl = url()->previous();
+        return view('menu', ['prevurl' => $prevurl]);
     }
 
     public function mypage()
     {
-        return view('mypage');
+        $user = Auth::user();
+        return view('mypage', ['user' => $user]);
+    }
+
+    public function getResult(Request $request)
+    {
+        // 選択されたオプションに基づいて結果を生成
+        $result = '選択された日付: ' . $request->input('date') . ', 時間: ' . $request->input('time') . ', 人数: ' . $request->input('number');
+
+        // 結果を返す
+        return $result;
     }
 }

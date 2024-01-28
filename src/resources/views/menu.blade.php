@@ -11,18 +11,28 @@
 <body>
     <header class="header">
         <div class="header-icon">
-            <a href="/">
+            <a href="{{ url()->previous() }}">
                 <h1 class="header-icon_x"><i class="fa-solid fa-x"></i></h1>
             </a>
         </div>
     </header>
 
     <main>
+        @auth
         <div class="menu-box">
-            <a href="" class="links">Home</a>
-            <a href="" class="links">Logout</a>
-            <a href="" class="links">Mypage</a>
+            <a href="/" class="links">Home</a>
+            <a href="/logout" class="links">Logout</a>
+            <a href="/mypage" class="links">Mypage</a>
         </div>
+        @endauth
+
+        @guest
+        <div class="menu-box">
+            <a href="/" class="links">Home</a>
+            <a href="/login" class="links">Login</a>
+            <a href="/mypage" class="links">Mypage</a>
+        </div>
+        @endguest
     </main>
 </body>
 </html>

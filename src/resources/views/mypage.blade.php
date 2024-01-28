@@ -11,7 +11,7 @@
 <body>
     <header class="header">
         <div class="header-icon">
-            <a href="/">
+            <a href="/menu">
                 <h1 class="header-icon_ttl"><i class="fa-solid fa-square-poll-horizontal fa-fw"></i>Rese</h1>
             </a>
         </div>
@@ -20,7 +20,7 @@
     <main>
         <div class="contents">
             <div class="contents-ttl">
-                <h2 class="user-name">testさん</h2>
+                <h2 class="user-name">{{ $user->name }}さん</h2>
             </div>
             <div class="contents-card flex">
                 <div class="contents-card_reservation">
@@ -29,7 +29,11 @@
                         <div class="card-content_ttl flex">
                             <i class="fa-solid fa-clock fa-lg icon clock"></i>
                             <h4>予約1</h4>
-                            <i class="fa-regular fa-circle-xmark icon x-mark"></i>
+                            <form class="delete-form" action="/todos/delete" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <i class="fa-regular fa-circle-xmark icon x-mark"></i>
+                            </form>
                         </div>
                         <div class="card-content_list flex">
                             <p>Shop</p>
