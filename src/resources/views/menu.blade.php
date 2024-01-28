@@ -29,8 +29,8 @@
         @guest
         <div class="menu-box">
             <a href="/" class="links">Home</a>
+            <a href="/register" class="links">Registration</a>
             <a href="/login" class="links">Login</a>
-            <a href="/mypage" class="links">Mypage</a>
         </div>
         @endguest
     </main>

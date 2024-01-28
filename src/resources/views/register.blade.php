@@ -11,7 +11,7 @@
 <body>
     <header class="header">
         <div class="header-icon">
-            <a href="/">
+            <a href="/menu">
                 <h1 class="header-icon_ttl"><i class="fa-solid fa-square-poll-horizontal fa-fw"></i>Rese</h1>
             </a>
         </div>
