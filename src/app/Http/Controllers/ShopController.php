@@ -29,9 +29,10 @@ class ShopController extends Controller
         return view('done');
     }
 
-    public function detail()
+    public function detail($id)
     {
-        return view('detail');
+        $shop = Shop::find($id);
+        return view('detail', compact('shop'));
     }
 
     public function menu()
