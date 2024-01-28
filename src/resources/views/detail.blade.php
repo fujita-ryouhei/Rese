@@ -40,7 +40,7 @@
                     </div>
                     <div class="explanation-content">
                         <p>
-                            #{{ $shop->explanation }}
+                            {{ $shop->explanation }}
                         </p>
                     </div>
                 </div>
