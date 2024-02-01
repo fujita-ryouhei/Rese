@@ -34,6 +34,10 @@ body {
     display: flex;
 }
 
+.explanation-name a {
+    text-decoration: none;
+}
+
 .explanation_arrow {
     padding: 5px 8px;
     background-color: #fff;

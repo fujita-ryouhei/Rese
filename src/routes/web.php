@@ -26,7 +26,7 @@ route::get('/thanks', [ShopController::class, 'thanks']);
 route::get('/done', [ShopController::class, 'done']);
 Route::get('//detail/{id}', [ShopController::class, 'detail'])->name('detail.page');
 Route::get('/menu', [ShopController::class, 'menu']);
-Route::middleware(['web', 'auth', 'guest'])->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/mypage', [ShopController::class, 'mypage']);
 });
 Route::get('/get-result', [ShopController::class, 'getResult'])->name('getResult');
