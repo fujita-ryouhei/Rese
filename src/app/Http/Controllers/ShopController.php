@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ReservationRequest;
 use App\Models\Shop;
+use App\Models\Reservation;
 use Auth;
 
 class ShopController extends Controller
@@ -41,10 +43,30 @@ class ShopController extends Controller
         return view('menu', ['prevurl' => $prevurl]);
     }
 
+    public function storeReservation(ReservationRequest $request)
+    {
+        $user_id = auth()->id(); // ログインユーザーのIDを取得
+
+        $reservation = new Reservation();
+        $reservation->shop_id = $request->input('shop_id');
+        $reservation->user_id = $user_id; // ログインユーザーのIDを保存
+        $reservation->date = $request->input('date');
+        $reservation->time = $request->input('time');
+        $reservation->number_of_people = $request->input('number');
+        $reservation->save();
+
+        // 保存後に適切な処理を追加
+        return redirect()->route('done');
+    }
+
+
     public function mypage()
     {
         $user = Auth::user();
-        return view('mypage', ['user' => $user]);
+        $userReservations = auth()->user()->reservations;
+        //  eager loadingでN+1 クエリ問題を回避
+        $userReservations->load('shop');
+        return view('mypage', ['user' => $user, 'reservations' => $userReservations]);
     }
 
     public function getResult(Request $request)

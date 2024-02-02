@@ -30,7 +30,7 @@ body {
 }
 
 .contents-card {
-    margin: 0 70px;
+    margin: 0 0 0 70px;
 }
 
 .contents-card_reservation {
@@ -42,6 +42,7 @@ body {
     color: #fff;
     box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.3);
     border-radius: 4px;
+    margin-bottom: 10px;
 }
 
 .card-content_ttl {
@@ -80,7 +81,7 @@ body {
 
 .contents-card_favorite {
     width: 50%;
-    margin: 0 60px;
+    margin: 0 0 0 60px;
     text-align: left;
 }
 

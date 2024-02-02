@@ -10,6 +10,16 @@
 </head>
 <body>
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="wrap">
             <div class="detail">
                 <header class="header">
@@ -47,7 +57,8 @@
             </div>
 
             <div class="reservation">
-                <form action="" method="post" class="reservation-form" id="myForm">
+                <form action="/storeReservation" method="post" class="reservation-form" id="myForm">
+                    @csrf
                     <div class="reservation-content">
                         <div class="reservation-ttl">
                             <h2>
@@ -55,6 +66,7 @@
                             </h2>
                         </div>
                         <div class="reservation-inputs">
+                            <input type="hidden" name="shop_id" value="{{ $shop->id }}">
                             <input type="date" name="date" id="date">
                             <select name="time" id="time">
                                 <option value=""></option>
@@ -85,10 +97,10 @@
                             </select>
                             <select name="number" id="number">
                                 <option value=""></option>
-                                <option value="1人">1人</option>
-                                <option value="2人">2人</option>
-                                <option value="3人">3人</option>
-                                <option value="4人">4人</option>
+                                <option value="1">1人</option>
+                                <option value="2">2人</option>
+                                <option value="3">3人</option>
+                                <option value="4">4人</option>
                             </select>
                         </div>
                         <div class="reservation-detail">

@@ -25,33 +25,40 @@
             <div class="contents-card flex">
                 <div class="contents-card_reservation">
                     <h3 class="contents-card_reservation--ttl">予約状況</h3>
-                    <div class="card-content">
-                        <div class="card-content_ttl flex">
-                            <i class="fa-solid fa-clock fa-lg icon clock"></i>
-                            <h4>予約1</h4>
-                            <form class="delete-form" action="/todos/delete" method="POST">
-                                @method('DELETE')
-                                @csrf
-                                <i class="fa-regular fa-circle-xmark icon x-mark"></i>
-                            </form>
-                        </div>
-                        <div class="card-content_list flex">
-                            <p>Shop</p>
-                            <p>仙人</p>
-                        </div>
-                        <div class="card-content_list flex">
-                            <p>Date</p>
-                            <p>2021-04-01</p>
-                        </div>
-                        <div class="card-content_list flex">
-                            <p>Time</p>
-                            <p>17:00</p>
-                        </div>
-                        <div class="card-content_list flex">
-                            <p>Number</p>
-                            <p>1人</p>
-                        </div>
-                    </div>
+                    @if($reservations !== null && count($reservations) > 0)
+                        @foreach($reservations as $reservation)
+                            <div class="card-content">
+                                <div class="card-content_ttl flex">
+                                    <i class="fa-solid fa-clock fa-lg icon clock"></i>
+                                    <h4>予約{{ $loop->iteration }}</h4>
+                                    <form class="delete-form" action="/todos/delete" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <i class="fa-regular fa-circle-xmark icon x-mark"></i>
+                                        <input type="hidden" name="shop_id" value="{{ $reservation->id }}">
+                                    </form>
+                                </div>
+                                <div class="card-content_list flex">
+                                    <p>Shop</p>
+                                    <p>{{ $reservation->shop->name }}</p>
+                                </div>
+                                <div class="card-content_list flex">
+                                    <p>Date</p>
+                                    <p>{{ $reservation->date }}</p>
+                                </div>
+                                <div class="card-content_list flex">
+                                    <p>Time</p>
+                                    <p>{{ $reservation->time }}</p>
+                                </div>
+                                <div class="card-content_list flex">
+                                    <p>Number</p>
+                                    <p>{{ $reservation->number_of_people }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <p>予約がありません</p>
+                    @endif
                 </div>
 
                 <div class="contents-card_favorite">
