@@ -49,4 +49,25 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Shop::class, 'favorites', 'user_id', 'shop_id')->withTimestamps();
+    }
+
+    public function toggleFavorite($shop_id)
+    {
+        $existingFavorite = $this->favorites()->where('shop_id', $shop_id)->first();
+
+        if ($existingFavorite) {
+            $existingFavorite->delete();
+        } else {
+            $this->favorites()->create(['shop_id' => $shop_id]);
+        }
+    }
+
+    public function isFavorite($shop_id)
+    {
+        return $this->favorites()->where('shop_id', $shop_id)->exists();
+    }
 }

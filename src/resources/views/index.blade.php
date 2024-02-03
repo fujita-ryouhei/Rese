@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Rese</title>
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <!-- jQueryの読み込み -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <header class="header">
@@ -50,6 +53,12 @@
                         <a href="{{ route('detail.page', ['id' => $shop->id]) }}">
                             <div class="card__content-detail">詳しくみる</div>
                         </a>
+
+                        <!-- お気に入りボタン -->
+                        <button class="favorite-btn" data-shop-id="{{ $shop->id }}" data-original-index="{{ $loop->index }}">
+                            @csrf
+                            <i class="fa-solid fa-heart fa-2x" style="color: #c7c7c7;"></i>
+                        </button>
                     </div>
                 </div>
             @endforeach
@@ -57,7 +66,6 @@
     </main>
 
     <script>
-        // 元のショップデータをJavaScriptの変数に埋め込む
         var originalShops = {!! json_encode($shops->take(20)) !!};
 
         function startSearch() {
@@ -65,28 +73,43 @@
             var selectedGenre = document.getElementById('genreSelect').value;
             var searchTerm = document.getElementById('searchInput').value;
 
-            // サーバーに対して非同期リクエストを行い、検索結果を取得します。
-
             var searchResults = originalShops.filter(function (shop) {
-            return shop.location.includes(selectedArea) &&
+                return shop.location.includes(selectedArea) &&
                     shop.category.includes(selectedGenre) &&
                     shop.name.toLowerCase().includes(searchTerm.toLowerCase());
-        });
+            });
 
-            // DOMを更新して検索結果を表示します。
             updateSearchResults(searchResults);
+            bindFavoriteButtonClickEvent();
+        }
+
+        function getFavoriteStatusSync(shopId) {
+            var isFavorited = false;
+
+            $.ajax({
+                type: 'GET',
+                url: '/favorite/status',
+                data: { shopId: shopId },
+                async: false,
+                success: function(response) {
+                    isFavorited = response.isFavorited;
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+            return isFavorited;
         }
 
         function updateSearchResults(results) {
             var resultContainer = document.getElementById('searchResults');
-
-            // 前回の結果をクリアします。
             resultContainer.innerHTML = '';
 
-            // 各検索結果を表示します。
-            results.forEach(function (shop) {
+            results.forEach(function (shop, index) {
                 var card = document.createElement('div');
                 card.className = 'card';
+                var isFavorited = getFavoriteStatusSync(shop.id);
 
                 card.innerHTML = `
                     <div class="card__img">
@@ -101,10 +124,58 @@
                         <a href="/detail/${shop.id}">
                             <div class="card__content-detail">詳しくみる</div>
                         </a>
-                    </div>
-                `;
+                        <button class="favorite-btn" data-shop-id="${shop.id}" data-original-index="${index}">
+                            @csrf
+                            <i class="fa-solid fa-heart fa-2x ${isFavorited ? 'heart-filled' : ''}" style="color: ${isFavorited ? '#f04242' : '#c7c7c7'};"></i>
+                        </button>
+                    </div>`;
 
                 resultContainer.appendChild(card);
+            });
+
+            bindFavoriteButtonClickEvent();
+        }
+
+        function getFavoriteStatus(shopId, callback) {
+            $.ajax({
+                type: 'GET',
+                url: '/favorite/status',
+                data: { shopId: shopId },
+                success: function(response) {
+                    callback(response.isFavorited);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    callback(false);
+                }
+            });
+        }
+
+        function bindFavoriteButtonClickEvent() {
+            $('.favorite-btn').off('click');
+
+            $('.favorite-btn').click(function() {
+                var shopId = $(this).data('shop-id');
+                var button = $(this);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/favorite/toggle',
+                    data: { shopId: shopId },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.isFavorited) {
+                            button.find('i').addClass('heart-filled');
+                        } else {
+                            button.find('i').removeClass('heart-filled');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
             });
         }
 
@@ -112,6 +183,51 @@
             if (event.key === 'Enter') {
                 startSearch();
             }
+        });
+
+        bindFavoriteButtonClickEvent();
+
+        $(document).ready(function() {
+            $('.favorite-btn').each(function() {
+                var shopId = $(this).data('shop-id');
+                var button = $(this);
+
+                getFavoriteStatus(shopId, function(isFavorited) {
+                    if (isFavorited) {
+                        button.find('i').addClass('heart-filled');
+                    }
+                });
+            });
+        });
+
+        $('.favorite-btn').click(function() {
+            var shopId = $(this).data('shop-id');
+            var button = $(this);
+
+            console.log('Button clicked!');
+
+            $.ajax({
+                type: 'POST',
+                url: '/favorite/toggle',
+                data: { shopId: shopId },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    console.log('Response:', response);
+
+                    if (response.isFavorited) {
+                        console.log('Adding class: heart-filled');
+                        button.find('i').addClass('heart-filled');
+                    } else {
+                        console.log('Removing class: heart-filled');
+                        button.find('i').removeClass('heart-filled');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
         });
     </script>
 </body>

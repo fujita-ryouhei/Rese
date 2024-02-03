@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Shop;
 use App\Models\Reservation;
+use App\Models\Favorite;
 use Auth;
 
 class ShopController extends Controller
@@ -15,6 +16,42 @@ class ShopController extends Controller
         $shops = Shop::all();
         return view('index', ['shops' => $shops]);
     }
+
+    public function getStatus(Request $request)
+    {
+        // ログインユーザーのID（仮定）
+        $userId = auth()->id();
+
+        // リクエストからショップIDを取得
+        $shopId = $request->input('shopId');
+
+        // お気に入りの状態をデータベースから取得
+        $isFavorited = Favorite::where('user_id', $userId)
+            ->where('shop_id', $shopId)
+            ->exists();
+
+        // 取得したお気に入りの状態をJSON形式で返す
+        return response()->json(['isFavorited' => $isFavorited]);
+    }
+
+    /**
+     * お気に入りをトグルするアクション
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function toggle(Request $request)
+    {
+        $shopId = $request->input('shopId');
+        $user = Auth::user();
+
+        // お気に入りをトグルする
+        $user->favorites()->toggle($shopId);
+
+        // 成功時のレスポンスなどを返す
+        return response()->json(['isFavorited' => $user->favorites()->where('shop_id', $shopId)->exists()]);
+    }
+
 
     public function login()
     {
@@ -64,9 +101,32 @@ class ShopController extends Controller
     {
         $user = Auth::user();
         $userReservations = auth()->user()->reservations;
-        //  eager loadingでN+1 クエリ問題を回避
+        // eager loadingでN+1 クエリ問題を回避
         $userReservations->load('shop');
-        return view('mypage', ['user' => $user, 'reservations' => $userReservations]);
+
+        // ログインユーザーのIDを取得
+        $userId = Auth::id();
+        $shops = Shop::all();
+
+        // お気に入りの状態を取得
+        $favoriteShops = $shops->filter(function ($shop) use ($userId) {
+            $shop->isFavorited = $userId ? $this->isShopFavorited($userId, $shop->id) : false;
+            return $shop->isFavorited;
+        });
+
+        return view('mypage', ['user' => $user, 'reservations' => $userReservations, 'shops' => $shops]);
+    }
+
+    private function isShopFavorited($userId, $shopId)
+    {
+        // ログインユーザーのIDが存在する場合のみ検索
+        if ($userId) {
+            return Favorite::where('user_id', $userId)
+                ->where('shop_id', $shopId)
+                ->exists();
+        }
+
+        return false;
     }
 
     public function getResult(Request $request)

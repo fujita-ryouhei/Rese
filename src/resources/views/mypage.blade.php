@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Rese</title>
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
     <link rel="stylesheet" href="{{ asset('css/mypage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <header class="header">
@@ -64,37 +66,110 @@
                 <div class="contents-card_favorite">
                     <h3 class="contents-card_favorite--ttl">お気に入り店舗</h3>
                     <div class="flex__item">
-                        <div class="card">
-                            <div class="card__img">
-                                <img src="https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/sushi.jpg" alt="" />
-                            </div>
-                            <div class="card__content">
-                                <div class="card__content-cat">仙人</div>
-                                <div class="card__content-tag">
-                                    <p class="card__content-tag-item">#東京都</p>
-                                    <p class="card__content-tag-item">#寿司</p>
-                                </div>
-                                <div class="card__content-detail">詳しくみる</div>
-                            </div>
-                        </div>
+                        @foreach($shops->take(20) as $shop)
+                            @if($shop->isFavorited)
+                                <div class="card">
+                                    <div class="card__img">
+                                        <img src="{{ $shop->image_url }}" alt="" />
+                                    </div>
+                                    <div class="card__content">
+                                        <div class="card__content-cat">{{ $shop->name }}</div>
+                                        <div class="card__content-tag">
+                                            <p class="card__content-tag-item">#{{ $shop->location }}</p>
+                                            <p class="card__content-tag-item">#{{ $shop->category }}</p>
+                                        </div>
+                                        <a href="{{ route('detail.page', ['id' => $shop->id]) }}">
+                                            <div class="card__content-detail">詳しくみる</div>
+                                        </a>
 
-                        <div class="card">
-                            <div class="card__img">
-                                <img src="https://coachtech-matter.s3-ap-northeast-1.amazonaws.com/image/yakiniku.jpg" alt="" />
-                            </div>
-                            <div class="card__content">
-                                <div class="card__content-cat">仙人</div>
-                                <div class="card__content-tag">
-                                    <p class="card__content-tag-item">#東京都</p>
-                                    <p class="card__content-tag-item">#寿司</p>
+                                        <!-- お気に入りボタン -->
+                                        <button class="favorite-btn" data-shop-id="{{ $shop->id }}" data-original-index="{{ $loop->index }}">
+                                            @csrf
+                                            <i class="fa-solid fa-heart fa-2x" style="color: #c7c7c7;"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="card__content-detail">詳しくみる</div>
-                            </div>
-                        </div>
+                            @endif
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </main>
+
+    <script>
+        // ページが読み込まれたときに実行される処理
+        $(document).ready(function() {
+            $('.favorite-btn').each(function() {
+                var shopId = $(this).data('shop-id');
+                var isFavorited = getFavoriteStatusSync(shopId);
+
+                // ハートマークの色を設定
+                if (isFavorited) {
+                    $(this).find('i').addClass('heart-filled');
+                } else {
+                    $(this).find('i').removeClass('heart-filled');
+                }
+
+                // データ属性を更新
+                $(this).data('is-favorited', isFavorited);
+            });
+        });
+
+        // 同期的にお気に入りの状態を取得する関数
+        function getFavoriteStatusSync(shopId) {
+            var isFavorited = false;
+
+            $.ajax({
+                type: 'GET',
+                url: '/favorite/status',
+                data: { shopId: shopId },
+                async: false, // 同期的に設定
+                success: function(response) {
+                    isFavorited = response.isFavorited;
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+            return isFavorited;
+        }
+
+        $('.favorite-btn').click(function() {
+            var shopId = $(this).data('shop-id');
+            var isFavorited = $(this).data('is-favorited');
+            var button = $(this);
+
+            // お気に入りをトグルするAPIリクエストを送信
+            $.ajax({
+                type: 'POST',
+                url: '/favorite/toggle',
+                data: { shopId: shopId },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    // ハートマークの色を切り替える
+                    if (response.isFavorited) {
+                        button.find('i').addClass('heart-filled');
+                    } else {
+                        button.find('i').removeClass('heart-filled');
+                    }
+
+                    // データ属性を更新
+                    button.data('is-favorited', response.isFavorited);
+
+                    // コンソールにログを出力
+                    console.log('APIリクエスト成功:', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // コンソールにログを出力
+                    console.error('APIリクエストエラー:', status, error);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
