@@ -33,11 +33,13 @@
                                 <div class="card-content_ttl flex">
                                     <i class="fa-solid fa-clock fa-lg icon clock"></i>
                                     <h4>予約{{ $loop->iteration }}</h4>
-                                    <form class="delete-form" action="/todos/delete" method="POST">
+                                    <form class="delete-form" action="/reservation/delete" method="POST">
                                         @method('DELETE')
                                         @csrf
-                                        <i class="fa-regular fa-circle-xmark icon x-mark"></i>
-                                        <input type="hidden" name="shop_id" value="{{ $reservation->id }}">
+                                        <input type="hidden" name="reservation_id" value="{{ $reservation->id }}">
+                                        <button type="submit" class="delete-btn">
+                                            <i class="fa-regular fa-circle-xmark icon x-mark"></i>
+                                        </button>
                                     </form>
                                 </div>
                                 <div class="card-content_list flex">
@@ -54,7 +56,7 @@
                                 </div>
                                 <div class="card-content_list flex">
                                     <p>Number</p>
-                                    <p>{{ $reservation->number_of_people }}</p>
+                                    <p>{{ $reservation->number_of_people }}人</p>
                                 </div>
                             </div>
                         @endforeach
@@ -66,7 +68,7 @@
                 <div class="contents-card_favorite">
                     <h3 class="contents-card_favorite--ttl">お気に入り店舗</h3>
                     <div class="flex__item">
-                        @foreach($shops->take(20) as $shop)
+                        @foreach($shops as $shop)
                             @if($shop->isFavorited)
                                 <div class="card">
                                     <div class="card__img">
@@ -161,12 +163,12 @@
                     button.data('is-favorited', response.isFavorited);
 
                     // コンソールにログを出力
-                    console.log('APIリクエスト成功:', response);
+                    // console.log('APIリクエスト成功:', response);
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                     // コンソールにログを出力
-                    console.error('APIリクエストエラー:', status, error);
+                    // console.error('APIリクエストエラー:', status, error);
                 }
             });
         });

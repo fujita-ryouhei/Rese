@@ -16,20 +16,21 @@ use App\Http\Controllers\AuthenticatedSessionController;
 |
 */
 
-Route::get('/get-result', [ShopController::class, 'getResult'])->name('getResult');
 Route::get('/register', [RegisteredUserController::class, 'register']);
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/login', [ShopController::class, 'login'])->name('login');
 Route::get('/signIn', [AuthenticatedSessionController::class, 'store']);
-Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 route::get('/thanks', [ShopController::class, 'thanks']);
-Route::get('/detail/{id}', [ShopController::class, 'detail'])->name('detail.page');
 Route::get('/menu', [ShopController::class, 'menu']);
 Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
     Route::get('/', [ShopController::class, 'index']);
+    Route::get('/detail/{id}', [ShopController::class, 'detail'])->name('detail.page');
+    Route::get('/get-result', [ShopController::class, 'getResult'])->name('getResult');
     Route::get('/favorite/status', [ShopController::class, 'getStatus']);
     Route::post('/favorite/toggle', [ShopController::class, 'toggle'])->name('favorite.toggle');
     route::post('/storeReservation', [ShopController::class, 'storeReservation'])->name('storeReservation');
     route::get('/done', [ShopController::class, 'done'])->name('done');
-    Route::get('/mypage', [ShopController::class, 'mypage']);
+    Route::delete('/reservation/delete', [ShopController::class, 'deleteReservation']);
+    Route::get('/mypage', [ShopController::class, 'mypage'])->name('mypage');
 });

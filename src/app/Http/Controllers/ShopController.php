@@ -137,4 +137,22 @@ class ShopController extends Controller
         // 結果を返す
         return $result;
     }
+
+    public function deleteReservation(Request $request)
+    {
+        // リクエストから 'reservation_id' を取得
+        $reservationId = $request->input('reservation_id');
+
+        // データベースから対象の予約を削除する処理（Eloquentモデルを使用）
+        $reservation = Reservation::find($reservationId);
+
+        if ($reservation) {
+            $reservation->delete();
+            // 成功時のリダイレクトなどを行う
+            return redirect()->route('mypage');
+        } else {
+            // レコードが見つからない場合の処理
+            return redirect()->route('mypage')->with('error', 'Reservation not found');
+        }
+    }
 }
