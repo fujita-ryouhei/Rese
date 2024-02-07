@@ -110,14 +110,22 @@ class ShopController extends Controller
 
         // お気に入りの状態を取得
         $favoriteShops = $shops->filter(function ($shop) use ($userId) {
-            $shop->isFavorited = $userId ? $this->isShopFavorited($userId, $shop->id) : false;
-            return $shop->isFavorited;
+            // お気に入りが存在するかどうかの条件を追加
+            $hasFavorite = $userId ? $this->hasFavorite($userId, $shop->id) : false;
+
+            // お気に入りがある場合に $shop->isFavorited を設定
+            if ($hasFavorite) {
+                $shop->isFavorited = true;
+                return true;
+            }
+
+            return false;
         });
 
-        return view('mypage', ['user' => $user, 'reservations' => $userReservations, 'shops' => $shops]);
+        return view('mypage', ['user' => $user, 'reservations' => $userReservations, 'favoriteShops' => $favoriteShops]);
     }
 
-    private function isShopFavorited($userId, $shopId)
+    private function hasFavorite($userId, $shopId)
     {
         // ログインユーザーのIDが存在する場合のみ検索
         if ($userId) {

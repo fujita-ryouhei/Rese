@@ -32,7 +32,7 @@
 
                 <div class="explanation">
                     <div class="explanation-name">
-                        <a href="/">
+                        <a href="{{ url()->previous() }}">
                             <h3 class="explanation_arrow">
                                 <
                             </h3>

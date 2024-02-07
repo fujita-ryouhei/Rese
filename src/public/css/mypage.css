@@ -148,11 +148,72 @@ body {
 .favorite-btn {
     border: none;
     background-color: #fff;
-    margin-left: 50px;
+    float: right;
     cursor: pointer;
 }
 
 .heart-filled {
     color: #f04242 !important;
     /* お気に入りが登録されたときの色を指定 */
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        max-width: 768px;
+    }
+
+    .flex {
+        display: block;
+    }
+
+    .contents-card {
+        margin: 0 40px;
+    }
+
+    .contents-card_reservation {
+        width: 100%;
+    }
+
+    .icon {
+        position: absolute;
+        left: 10px;
+    }
+
+    .card-content_ttl h4 {
+        margin-left: 0px;
+        padding-top: 20px;
+    }
+
+    .x-mark {
+        position: absolute;
+        left: 500px;
+        right: 20px;
+    }
+
+    .card-content_list {
+        display: flex;
+    }
+
+    .contents-card_favorite {
+        width: 100%;
+        margin: 0 ;
+        text-align: center;
+    }
+
+    .contents-card_favorite--ttl {
+        margin: 40px 0 0 20px;
+        text-align: center;
+    }
+
+    .flex__item {
+        display: block;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .favorite-btn {
+        float: right;
+    }
 }

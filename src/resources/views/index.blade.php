@@ -39,7 +39,7 @@
 
     <main>
         <div class="flex__item wrap" id="searchResults">
-            @foreach($shops->take(20) as $shop)
+            @foreach($shops as $shop)
                 <div class="card">
                     <div class="card__img">
                         <img src="{{ $shop->image_url }}" alt="" />

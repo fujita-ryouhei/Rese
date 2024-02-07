@@ -82,3 +82,9 @@ body {
     padding: 5px 15px;
     border-radius: 4px;
 }
+
+@media screen and (max-width: 768px) {
+    .box-contents {
+        width: 50%;
+    }
+}

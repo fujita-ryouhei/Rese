@@ -68,31 +68,35 @@
                 <div class="contents-card_favorite">
                     <h3 class="contents-card_favorite--ttl">お気に入り店舗</h3>
                     <div class="flex__item">
-                        @foreach($shops as $shop)
-                            @if($shop->isFavorited)
-                                <div class="card">
-                                    <div class="card__img">
-                                        <img src="{{ $shop->image_url }}" alt="" />
-                                    </div>
-                                    <div class="card__content">
-                                        <div class="card__content-cat">{{ $shop->name }}</div>
-                                        <div class="card__content-tag">
-                                            <p class="card__content-tag-item">#{{ $shop->location }}</p>
-                                            <p class="card__content-tag-item">#{{ $shop->category }}</p>
+                        @if ($favoriteShops->isNotEmpty())
+                            @foreach($favoriteShops  as $shop)
+                                @if($shop->isFavorited)
+                                    <div class="card">
+                                        <div class="card__img">
+                                            <img src="{{ $shop->image_url }}" alt="" />
                                         </div>
-                                        <a href="{{ route('detail.page', ['id' => $shop->id]) }}">
-                                            <div class="card__content-detail">詳しくみる</div>
-                                        </a>
+                                        <div class="card__content">
+                                            <div class="card__content-cat">{{ $shop->name }}</div>
+                                            <div class="card__content-tag">
+                                                <p class="card__content-tag-item">#{{ $shop->location }}</p>
+                                                <p class="card__content-tag-item">#{{ $shop->category }}</p>
+                                            </div>
+                                            <a href="{{ route('detail.page', ['id' => $shop->id]) }}">
+                                                <div class="card__content-detail">詳しくみる</div>
+                                            </a>
 
-                                        <!-- お気に入りボタン -->
-                                        <button class="favorite-btn" data-shop-id="{{ $shop->id }}" data-original-index="{{ $loop->index }}">
-                                            @csrf
-                                            <i class="fa-solid fa-heart fa-2x" style="color: #c7c7c7;"></i>
-                                        </button>
+                                            <!-- お気に入りボタン -->
+                                            <button class="favorite-btn" data-shop-id="{{ $shop->id }}" data-original-index="{{ $loop->index }}">
+                                                @csrf
+                                                <i class="fa-solid fa-heart fa-2x" style="color: #c7c7c7;"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            @endif
-                        @endforeach
+                                @endif
+                            @endforeach
+                        @else
+                            <p>お気に入り店舗がありません</p>
+                        @endif
                     </div>
                 </div>
             </div>

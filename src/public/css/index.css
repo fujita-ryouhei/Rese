@@ -106,11 +106,25 @@ body {
 .favorite-btn {
     border: none;
     background-color: #fff;
-    margin-left: 50px;
+    float: right;
     cursor: pointer;
 }
 
 .heart-filled {
     color: #f04242 !important;
     /* お気に入りが登録されたときの色を指定 */
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        max-width: 768px;
+    }
+
+    .wrap {
+        max-width: 768px;
+    }
+
+    .card {
+        width: 45%;
+    }
 }
