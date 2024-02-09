@@ -148,6 +148,81 @@ body {
     cursor: pointer;
 }
 
+.comments {
+    margin-top: 40px;
+}
+
+.comments ul{
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    padding-inline-start: 0px;
+}
+
+.comment-content {
+    margin: 20px;
+    background-color: #fff;
+    padding: 20px 40px;
+}
+
+.comment-content .wrap p:nth-child(2) {
+    margin-left: 20px;
+}
+
+.comment-content .wrap p:nth-child(3) {
+    color: #f04242;
+}
+
+.comment-detail p:nth-child(2) {
+    border: 1px solid #888;
+    padding: 10px;
+}
+
+li {
+    list-style-type: none;
+}
+
+.rating {
+    margin: 20px;
+    background-color: #fff;
+    padding: 20px 40px;
+}
+
+.rating-ster {
+    font-size: 24px;
+}
+
+#star1,
+#star2,
+#star3,
+#star4,
+#star5 {
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.form-group {
+    margin-top: 10px;
+}
+
+.form-group textarea {
+    width: 100%;
+    margin-top: 10px;
+    height: 180px;
+    resize: none;
+    font-size: 20px;
+}
+
+.rating-btn {
+    display: block;
+    margin-left: auto;
+    padding: 10px;
+    font-size: 20px;
+    background-color: rgb(77, 124, 255);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 768px) {
     body {
         max-width: 768px;

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\ShopRatingRequest;
 use App\Models\Shop;
 use App\Models\Reservation;
 use App\Models\Favorite;
+use App\Models\ShopRating;
 use Auth;
 
 class ShopController extends Controller
@@ -71,7 +73,21 @@ class ShopController extends Controller
     public function detail($id)
     {
         $shop = Shop::find($id);
-        return view('detail', compact('shop'));
+        $ratings = ShopRating::where('shop_id', $id)->with('user')->get();
+
+        return view('detail', ['shop' => $shop, 'ratings' => $ratings]);
+    }
+
+    public function rating(ShopRatingRequest $request)
+    {
+        $rating = new ShopRating();
+        $rating->shop_id = $request->shop_id;
+        $rating->rating = $request->rating;
+        $rating->comment = $request->comment;
+        $rating->user_id = Auth::id(); // ログインユーザーのIDを設定
+        $rating->save();
+
+        return redirect()->route('index');
     }
 
     public function menu()

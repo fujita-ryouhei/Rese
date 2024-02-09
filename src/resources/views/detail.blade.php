@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
     <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <main>
@@ -126,10 +127,54 @@
                 </form>
             </div>
         </div>
+
+        <div class="comments">
+            <ul>
+                @foreach ($ratings as $rating)
+                <div class="comment-content">
+                    <li>
+                        <div class="wrap">
+                            <p>{{ $rating->user->name }}</p>
+                            <p>評価: </p>
+                            <p>{{ $rating->rating }}</p>
+                        </div>
+                        <div class="comment-detail">
+                            @if ($rating->comment)
+                                <p>コメント</p>
+                                <p>{{ $rating->comment }}</p>
+                            @endif
+                        </div>
+                    </li>
+                </div>
+                @endforeach
+            </ul>
+        </div>
+
+        <div class="rating">
+            <div class="rating-star">
+                <span>評価: </span>
+                <span onclick="setRating(1)" id="star1">&#9733;</span>
+                <span onclick="setRating(2)" id="star2">&#9733;</span>
+                <span onclick="setRating(3)" id="star3">&#9733;</span>
+                <span onclick="setRating(4)" id="star4">&#9733;</span>
+                <span onclick="setRating(5)" id="star5">&#9733;</span>
+            </div>
+
+            <form action="{{ route('shop-ratings.rating') }}" method="POST" id="ratingForm" class="comment-form">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+                <input type="hidden" name="shop_id" value="{{ $shop->id }}">
+                <input type="hidden" name="rating" id="ratingInput" value="0">
+                <div class="form-group">
+                    <label for="comment">コメント:</label>
+                    <textarea name="comment" id="comment" class="form-control"></textarea>
+                </div>
+                <button type="submit" class="rating-btn">送信</button>
+            </form>
+        </div>
     </main>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
 
 </html>

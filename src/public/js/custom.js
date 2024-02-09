@@ -33,3 +33,24 @@ $(document).ready(function () {
         $('#selectedNumber').text(selectedNumber);
     }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const initialRating = document.getElementById('ratingInput').value;
+    highlightStars(initialRating);
+});
+
+function setRating(rating) {
+    document.getElementById('ratingInput').value = rating;
+    highlightStars(rating);
+}
+
+function highlightStars(rating) {
+    for (let i = 1; i <= 5; i++) {
+        const star = document.getElementById(`star${i}`);
+        if (i <= rating) {
+        star.style.color = '#f04242';
+        } else {
+        star.style.color = '#c7c7c7';
+        }
+    }
+}

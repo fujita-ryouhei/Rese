@@ -24,8 +24,9 @@ route::get('/thanks', [ShopController::class, 'thanks']);
 Route::get('/menu', [ShopController::class, 'menu']);
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
-    Route::get('/', [ShopController::class, 'index']);
+    Route::get('/', [ShopController::class, 'index'])->name('index');
     Route::get('/detail/{id}', [ShopController::class, 'detail'])->name('detail.page');
+    Route::post('/shop-ratings', [ShopController::class, 'rating'])->name('shop-ratings.rating');
     Route::get('/get-result', [ShopController::class, 'getResult'])->name('getResult');
     Route::get('/favorite/status', [ShopController::class, 'getStatus']);
     Route::post('/favorite/toggle', [ShopController::class, 'toggle'])->name('favorite.toggle');
