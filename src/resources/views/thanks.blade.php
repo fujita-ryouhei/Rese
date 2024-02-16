@@ -18,6 +18,12 @@
     </header>
 
     <main>
+        @if(session('success'))
+            <div class="alert-success" style="padding: 10px; background-color: rgb(176, 255, 200);">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="box">
             <div class="box-contents">
                 <div class="box-header">

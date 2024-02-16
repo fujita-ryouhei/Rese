@@ -18,6 +18,7 @@ use App\Http\Controllers\AuthenticatedSessionController;
 
 Route::get('/register', [RegisteredUserController::class, 'register']);
 Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::get('/confirm/{token}', [RegisteredUserController::class, 'confirmEmail'])->name('confirm.email');
 Route::get('/login', [ShopController::class, 'login'])->name('login');
 Route::get('/signIn', [AuthenticatedSessionController::class, 'store']);
 route::get('/thanks', [ShopController::class, 'thanks']);
