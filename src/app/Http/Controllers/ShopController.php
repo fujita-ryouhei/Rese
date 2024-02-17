@@ -179,4 +179,26 @@ class ShopController extends Controller
             return redirect()->route('mypage')->with('error', 'Reservation not found');
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        // 予約IDを取得
+        $reservationId = $id;
+        
+        // 新しい日時と人数を取得
+        $newDate = $request->input('new_date');
+        $newTime = $request->input('new_time');
+        $newNumber = $request->input('new_number');
+
+        // 予約を取得
+        $reservation = Reservation::find($reservationId);
+
+        // 予約情報を更新
+        $reservation->date = $newDate;
+        $reservation->time = $newTime;
+        $reservation->number_of_people = $newNumber;
+        $reservation->save();
+
+        return redirect()->back()->with('success', '予約が更新されました');
+    }
 }

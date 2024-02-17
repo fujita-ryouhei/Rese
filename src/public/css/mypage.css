@@ -85,6 +85,30 @@ body {
     width: 70%;
 }
 
+.update-form {
+    border-top: 1px solid #eee;
+}
+
+.update-form_input {
+    display: block;
+    text-align: left;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.update-btn {
+    text-align: right;
+    padding: 10px;
+}
+
+.update-btn_submit {
+    border: none;
+    background-color: #fff;
+    color: rgb(0, 68, 255);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 .contents-card_favorite {
     width: 50%;
     margin: 0 0 0 60px;

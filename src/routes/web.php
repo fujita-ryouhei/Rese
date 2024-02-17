@@ -35,4 +35,5 @@ Route::middleware(['web', 'auth'])->group(function () {
     route::get('/done', [ShopController::class, 'done'])->name('done');
     Route::delete('/reservation/delete', [ShopController::class, 'deleteReservation']);
     Route::get('/mypage', [ShopController::class, 'mypage'])->name('mypage');
+    Route::post('/reservation/{id}/update', [ShopController::class, 'update'])->name('reservation.update');
 });

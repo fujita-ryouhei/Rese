@@ -20,6 +20,12 @@
     </header>
 
     <main>
+        @if(session('success'))
+            <div class="alert alert-success" style="padding: 10px; background-color: rgb(176, 255, 200);">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="contents">
             <div class="contents-ttl">
                 <h2 class="user-name">{{ $user->name }}さん</h2>
@@ -30,6 +36,7 @@
                     @if($reservations !== null && count($reservations) > 0)
                         @foreach($reservations as $reservation)
                             <div class="card-content">
+                                <!-- 予約情報表示 -->
                                 <div class="card-content_ttl flex">
                                     <i class="fa-solid fa-clock fa-lg icon clock"></i>
                                     <h4>予約{{ $loop->iteration }}</h4>
@@ -58,6 +65,26 @@
                                     <p>Number</p>
                                     <p>{{ $reservation->number_of_people }}人</p>
                                 </div>
+
+                                <!-- 予約変更フォーム -->
+                                <form class="update-form" action="{{ route('reservation.update', ['id' => $reservation->id]) }}" method="POST">
+                                    @csrf
+                                    <div class="update-form_input">
+                                        <label for="new_date_{{ $reservation->id }}">日付変更:</label>
+                                        <input type="date" id="new_date_{{ $reservation->id }}" name="new_date" >
+                                    </div>
+                                    <div class="update-form_input">
+                                        <label for="new_time_{{ $reservation->id }}">時間変更:</label>
+                                        <input type="time" id="new_time_{{ $reservation->id }}" name="new_time" >
+                                    </div>
+                                    <div class="update-form_input">
+                                        <label for="new_number_{{ $reservation->id }}">人数変更:</label>
+                                        <input type="number" id="new_number_{{ $reservation->id }}" name="new_number" >
+                                    </div>
+                                    <div class="update-btn">
+                                        <button type="submit" class="update-btn_submit">変更する</button>
+                                    </div>
+                                </form>
                             </div>
                         @endforeach
                     @else
