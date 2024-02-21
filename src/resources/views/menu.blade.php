@@ -18,12 +18,32 @@
     </header>
 
     <main>
+        @can('admin')
+            <div class="menu-box">
+                <a href="/" class="links">Home</a>
+                <a href="/logout" class="links">Logout</a>
+                <a href="/admin" class="links">Admin</a>
+            </div>
+        @endcan
+
+        @can('representative')
+            <div class="menu-box">
+                <a href="/" class="links">Home</a>
+                <a href="/logout" class="links">Logout</a>
+                <a href="/shop/create" class="links">Create Shop</a>
+                <a href="/shop/{id}" class="links">Shop Information</a>
+                <a href="/reservation/info" class="links">Reservation Information</a>
+            </div>
+        @endcan
+
         @auth
-        <div class="menu-box">
-            <a href="/" class="links">Home</a>
-            <a href="/logout" class="links">Logout</a>
-            <a href="/mypage" class="links">Mypage</a>
-        </div>
+        @if(auth()->user()->role_id !== 5 && auth()->user()->role_id !== 10)
+            <div class="menu-box">
+                <a href="/" class="links">Home</a>
+                <a href="/logout" class="links">Logout</a>
+                <a href="/mypage" class="links">Mypage</a>
+            </div>
+        @endif
         @endauth
 
         @guest

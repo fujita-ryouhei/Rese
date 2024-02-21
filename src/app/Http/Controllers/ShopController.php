@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\ShopEditRequest;
 use App\Http\Requests\ShopRatingRequest;
 use App\Models\Shop;
 use App\Models\Reservation;
@@ -116,7 +117,7 @@ class ShopController extends Controller
     public function mypage()
     {
         $user = Auth::user();
-        $userReservations = auth()->user()->reservations;
+        $userReservations = auth()->user()->reservations()->orderBy('date', 'asc')->get();
         // eager loadingでN+1 クエリ問題を回避
         $userReservations->load('shop');
 
@@ -180,11 +181,11 @@ class ShopController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function updateReservation(ReservationRequest $request, $id)
     {
         // 予約IDを取得
         $reservationId = $id;
-        
+
         // 新しい日時と人数を取得
         $newDate = $request->input('new_date');
         $newTime = $request->input('new_time');
@@ -200,5 +201,57 @@ class ShopController extends Controller
         $reservation->save();
 
         return redirect()->back()->with('success', '予約が更新されました');
+    }
+
+    public function createShop()
+    {
+        return view('create_shop');
+    }
+
+    public function storeShop(Request $request) {
+        $shop = new Shop;
+        $shop->name = $request->name;
+        $shop->image_url = $request->image_url;
+        $shop->location = $request->location;
+        $shop->category = $request->category;
+        $shop->explanation = $request->explanation;
+        $shop->representative_id = Auth::user()->id;
+        $shop->save();
+
+        return redirect()->route('shop.create')->with('success', '店舗情報を作成しました。');
+    }
+
+    public function shopInfo($id)
+    {
+        $user = Auth::user(); // ログインユーザーを取得
+        $shop = Shop::where('representative_id', $user->id) // ログインユーザーのIDと関連付けられた店舗を検索
+                    ->firstOrFail();
+        return view('shop_information', compact('shop'));
+    }
+
+    public function updateShop(ShopEditRequest $request, $id)
+    {
+        $shop = Shop::findOrFail($id);
+        $shop->name = $request->name;
+        $shop->image_url = $request->image_url;
+        $shop->location = $request->location;
+        $shop->category = $request->category;
+        $shop->explanation = $request->explanation;
+        $shop->save();
+
+        return redirect()->route('shop.info', $shop->id)->with('success', '店舗情報が更新されました');
+    }
+
+    public function reservationInfo()
+    {
+        $user = Auth::user(); // ログインユーザーを取得
+
+        // ログインユーザーが関連付けられた店舗を検索
+        $shop = Shop::where('representative_id', $user->id)->firstOrFail();
+
+        // 店舗に関連付けられた予約情報を取得
+        $reservations = Reservation::where('shop_id', $shop->id)->orderBy('date', 'asc')->get();
+
+        return view('reservation_information', compact('reservations'));
     }
 }

@@ -18,4 +18,9 @@ class Shop extends Model
     {
         return $this->hasMany(Favorite::class, 'shop_id', 'id');
     }
+
+    public function representative()
+    {
+        return $this->belongsTo(User::class, 'representative_id');
+    }
 }

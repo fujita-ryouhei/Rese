@@ -35,5 +35,16 @@ Route::middleware(['web', 'auth'])->group(function () {
     route::get('/done', [ShopController::class, 'done'])->name('done');
     Route::delete('/reservation/delete', [ShopController::class, 'deleteReservation']);
     Route::get('/mypage', [ShopController::class, 'mypage'])->name('mypage');
-    Route::post('/reservation/{id}/update', [ShopController::class, 'update'])->name('reservation.update');
+    Route::post('/reservation/{id}/update', [ShopController::class, 'updateReservation'])->name('reservation.update');
+});
+Route::group(['middleware' => ['auth', 'can:admin']], function () {
+    Route::get('/admin', [RegisteredUserController::class, 'admin']);
+    Route::post('/createRepresentative', [RegisteredUserController::class, 'createRepresentative']);
+});
+Route::group(['middleware' => ['auth', 'can:representative']], function () {
+    Route::get('/shop/create', [ShopController::class, 'createShop'])->name('shop.create');
+    Route::post('/shop/store', [ShopController::class, 'storeShop'])->name('shop.store');
+    Route::get('/shop/{id}', [ShopController::class, 'shopInfo'])->name('shop.info');
+    Route::put('/shop/{id}', [ShopController::class, 'updateShop'])->name('shop.update');
+    Route::get('/reservation/info', [ShopController::class, 'reservationInfo'])->name('reservation.info');
 });

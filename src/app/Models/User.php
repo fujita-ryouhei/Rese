@@ -44,9 +44,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * このユーザーが持つ予約を取得
-     */
+    public function shops()
+    {
+        return $this->hasMany(Shop::class, 'representative_id');
+    }
+
     public function reservations()
     {
         return $this->hasMany(Reservation::class);

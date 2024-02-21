@@ -42,4 +42,21 @@ class RegisteredUserController extends Controller
 
         return redirect()->route('login')->with('success', 'メールが確認されました。ログインしてください。');
     }
+
+    public function admin()
+    {
+        return view('admin');
+    }
+
+    public function createRepresentative(RegisterRequest $request)
+    {
+        $user = new User;
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        $user->role_id = $request->input('role_id');
+        $user->save();
+
+        return redirect('/admin')->with('success', '店舗代表者アカウントが作成されました。');
+    }
 }
