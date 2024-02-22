@@ -23,6 +23,7 @@
                 <a href="/" class="links">Home</a>
                 <a href="/logout" class="links">Logout</a>
                 <a href="/admin" class="links">Admin</a>
+                <a href="/send/email" class="links">Mail Form</a>
             </div>
         @endcan
 
@@ -33,6 +34,7 @@
                 <a href="/shop/create" class="links">Create Shop</a>
                 <a href="/shop/{id}" class="links">Shop Information</a>
                 <a href="/reservation/info" class="links">Reservation Information</a>
+                <a href="/send/email" class="links">Mail Form</a>
             </div>
         @endcan
 

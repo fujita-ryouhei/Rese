@@ -74,4 +74,21 @@ class User extends Authenticatable
     {
         return $this->favorites()->where('shop_id', $shop_id)->exists();
     }
+
+    public function isAdmin()
+    {
+        // 管理者権限の条件をここに記述
+        return $this->role_id === 10;
+    }
+
+    public function isStoreRepresentative()
+    {
+        // 店舗代表者の条件をここに記述
+        return $this->role_id === 5;
+    }
+
+    public static function getAdminIds()
+    {
+        return self::where('role_id', 10)->pluck('id')->toArray();
+    }
 }
